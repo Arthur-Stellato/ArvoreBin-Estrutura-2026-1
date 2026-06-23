@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include <algorithm>
 
 using namespace std;
 
@@ -50,9 +51,9 @@ void libera_ArvBin(ArvBin *raiz)
     *raiz = nullptr;
 }
 
-// Insere um novo nó na árvore
 bool insere_ArvBin(ArvBin *raiz, int matricula, string nome, string curso)
 {
+    // Verifica se a árvore está vazia
     if (raiz == nullptr)
         return false;
 
@@ -63,7 +64,8 @@ bool insere_ArvBin(ArvBin *raiz, int matricula, string nome, string curso)
     novo->esq = nullptr;
     novo->dir = nullptr;
 
-    if (*raiz == nullptr){
+    if (*raiz == nullptr)
+    { // árvore vazia, insere na raiz
         *raiz = novo;
         return true;
     }
@@ -72,16 +74,16 @@ bool insere_ArvBin(ArvBin *raiz, int matricula, string nome, string curso)
 
     while (true)
     {
-        if (nome < atual->nome) // se o nome for menor, vai para a subárvore esquerda
+        if (nome < atual->nome)
         {
-            if (atual->esq == nullptr) // se não houver nó à esquerda, insere o novo nó aqui
+            if (atual->esq == nullptr)
             {
                 atual->esq = novo;
                 return true;
             }
             atual = atual->esq;
         }
-        else if (nome > atual->nome) // se o nome do novo nó for maior que o nome do nó atual, vai para a subárvore direita
+        else if (nome > atual->nome)
         {
             if (atual->dir == nullptr)
             {
@@ -92,9 +94,9 @@ bool insere_ArvBin(ArvBin *raiz, int matricula, string nome, string curso)
         }
         else
         {
-            // matricula ja existente, não insere
+            // nome igual → chave duplicada não permitida
+            cout << "Erro: nome já cadastrado!\n";
             delete novo;
-            cout << "Erro: Matrícula já cadastrada!\n";
             return false;
         }
     }
@@ -105,7 +107,8 @@ NO *busca_ArvBin(NO *no, string nome)
     if (no == nullptr)
         return nullptr;
 
-    if (nome == no->nome){ // nó encontrado
+    if (nome == no->nome)
+    { // nó encontrado
         return no;
     }
 
@@ -157,7 +160,7 @@ int main()
 
     do
     {
-        cout << "\n===== MENU =====\n";
+        cout << "\n     MENU     \n";
         cout << "1. Inserir aluno\n";
         cout << "2. Percorrer em ordem\n";
         cout << "3. Buscar aluno por nome\n";
@@ -178,7 +181,7 @@ int main()
             cout << "Digite a matrícula: ";
             cin >> matricula;
 
-            // Descarta tudo que sobrou no buffer até o '\n' (inclusive)
+            // Descarta tudo que sobrou no buffer até o '\n'
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             cout << "Digite o nome: ";
@@ -190,7 +193,7 @@ int main()
             if (insere_ArvBin(raiz, matricula, nome, curso))
                 cout << "Aluno inserido com sucesso!\n";
             else
-                cout << "Erro: Matrícula já cadastrada!\n";
+                cout << "Erro ao cadastrar aluno!\n";
 
             break;
         }
@@ -240,8 +243,8 @@ int main()
 
     } while (opcao != 0);
 
-    libera_ArvBin(raiz);  // destrói todos os nós
-    delete raiz; // libera a estrutura da árvore
+    libera_ArvBin(raiz); // destrói todos os nós
+    delete raiz;         // libera a estrutura da árvore
 
     return 0;
 }
