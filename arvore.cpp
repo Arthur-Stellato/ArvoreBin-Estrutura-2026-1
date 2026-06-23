@@ -92,8 +92,9 @@ bool insere_ArvBin(ArvBin *raiz, int matricula, string nome, string curso)
         }
         else
         {
-            // RA já existe
+            // matricula ja existente, não insere
             delete novo;
+            cout << "Erro: Matrícula já cadastrada!\n";
             return false;
         }
     }
@@ -121,7 +122,7 @@ int altArvBin(NO *no)
     if (no == nullptr)
         return 0;
 
-    // calcula a altura da subárvore esquerda e direita e retorna o maior valor + 1 (para contar o nó atual)
+    // 1 + a maior altura entre seus dois filhos
     return 1 + max(altArvBin(no->esq), altArvBin(no->dir));
 }
 
@@ -239,7 +240,8 @@ int main()
 
     } while (opcao != 0);
 
-    delete raiz;
+    libera_ArvBin(raiz);  // destrói todos os nós
+    delete raiz; // libera a estrutura da árvore
 
     return 0;
 }
